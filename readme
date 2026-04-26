@@ -1,0 +1,60 @@
+# Tokenization Experiment for MT
+
+This repository tests whether constrained morphology-aware preprocessing can reduce token fragmentation for machine translation.
+
+## Files
+
+- `tokenizer.py`  
+  Main Python script that runs the full experiment.
+
+- `tokenizer.ipynb`  
+  Notebook version of the same experiment, useful for Colab / step-by-step inspection.
+
+## Research Question
+
+Can constrained morphology-aware tokenization reduce token fragmentation in a morphologically richer language?
+
+## Method
+
+The experiment compares:
+
+1. Standard BPE baseline  
+2. Rare + long morphology-aware preprocessing  
+
+The rare + long method only applies suffix splitting when a word is:
+
+- rare in the training corpus
+- long enough to plausibly contain morphology
+
+## Languages
+
+- Polish: morphologically richer test case
+- Spanish: comparison language
+
+## Main Result
+
+For Polish, the best method slightly reduced token fragmentation:
+
+| Language | Method | Tokens / Word | Tokens / Sentence |
+|---|---|---:|---:|
+| Polish | BPE baseline | 1.267530 | 28.970000 |
+| Polish | rare_long_freq2_len8 | 1.265820 | 28.955000 |
+| Spanish | BPE baseline | 1.144818 | 32.560000 |
+| Spanish | rare_long_freq2_len8 | 1.146172 | 32.620000 |
+
+## Interpretation
+
+The constrained rare + long method slightly improves token efficiency for Polish, but not for Spanish.
+
+This suggests that morphology-aware preprocessing may be more useful for morphologically richer languages.
+
+## Example Changes
+
+Some Polish words become less fragmented:
+
+```text
+parlament: ['parla', 'ment'] -> ['parlament']
+zestaw: ['ze', 'staw'] -> ['zestaw']
+znajdują: ['znajdu', 'ją'] -> ['znajdują']
+sygnał: ['sygna', 'ł'] -> ['sygnał']
+rozwojowi: ['roz', 'woj', 'owi'] -> ['rozwoj', 'owi']
